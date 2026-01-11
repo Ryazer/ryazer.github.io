@@ -1,0 +1,613 @@
+    /* Reset & Body Setup */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+
+    body {
+        background-color: #1a1a1a;
+        margin: 0;
+        padding: 0;
+    
+        /* These three lines do the centering magic */
+        display: flex;
+        justify-content: center; /* Centers horizontally */
+        align-items: center;     /* Centers vertically */
+        min-height: 100vh;       /* Makes the body take up the full screen height */
+    }
+
+
+    #game-container {
+        width: 960px;
+        height: 540px;
+        background: #fdf2f8;
+    
+        /* Change 'absolute' to 'relative' so the centering works */
+        position: relative;
+    
+        display: flex;
+        flex-direction: column;
+        font-family: 'Helvetica Neue', sans-serif;
+        border: 2px solid #333;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Adds a nice shadow for the thriller look */
+    }
+
+
+
+
+    #intro-screen {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 100; /* Stays on top of the chat at the start */
+        background: #000;
+    }
+
+
+    #room-bg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: url('assets/room.jpg') no-repeat center center;
+        background-size: cover;
+        filter: brightness(0.6); /* Makes the room darker so the phone stands out */
+    }
+
+
+    #phone-container {
+        position: absolute;
+        top: 50%;
+        left: 40%;
+        transform: translate(-50%, -50%);
+        width: 280px; /* Made much bigger as requested */
+        z-index: 95;
+        display: none;
+        filter: drop-shadow(0 0 20px rgba(255, 77, 148, 0.4));
+    }
+
+
+    #phone-frame {
+        width: 200%;
+        display: block;
+        position: relative;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+
+
+    #phone-screen {
+        position: absolute;
+        /* Tweak these % values slightly if it doesn't fit your specific PNG frame */
+        top: 10%;
+        left: 63%;
+        width: 75%;
+        height: 78%;
+    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        z-index: 1;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        padding: 20px 10px;
+        gap: 15px;
+        border-radius: 25px; /* Matches the curve of modern phones */
+        overflow: hidden;
+    }
+
+
+    /* Container for each app icon + its text */
+    .app-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    /* Make sure the icons and labels are solid */
+    .app-icon {
+        font-size: 24px;
+        margin-bottom: 2px;
+        opacity: 1 !important; /* Forces the emoji to be solid */
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); /* Makes emojis "pop" */
+    }
+
+
+    .app-label {
+        color: white;
+        font-size: 10px;
+        font-weight: 500;
+        opacity: 1 !important; /* Forces the text to be solid */
+    }
+
+
+    /* Special styling for the Eros logo to make it the star */
+    #eros-app-wrapper {
+        grid-column: 2; /* Keeps it in the middle column */
+        display: flex;
+        flex-basis: 100%; /* This forces Eros to its own line at the bottom */
+        background: none !important; /* Removes the white box so logo stands out */
+        border: none !important;
+        box-shadow: none !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        animation: pulse 1.5s infinite;
+        background: rgba(255, 77, 148, 0.15); /* Pinkish glass for Eros */
+        border: 1px solid rgba(255, 77, 148, 0.3);
+    }
+
+
+    #eros-logo {
+        width: 85px; /* Slightly larger than other icons */
+        height: 85px;
+        border-radius: 15px;
+        animation: pulse 1.5s infinite;
+        background: rgb(254, 143, 224);
+        box-shadow: 0 0 15px rgba(255, 77, 148, 0.6);
+    }
+    .app-wrapper {
+        /* Use rgba instead of opacity: the 0.2 at the end is the translucency */
+        background: rgba(255, 255, 255, 0.2);
+    
+        /* This creates the blur effect behind the icon without affecting the icon itself */
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    
+        border-radius: 15px;
+
+
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    
+        /* Ensure the content inside is fully opaque */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    .app-wrapper:hover {
+        transform: scale(1.05);
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            filter: drop-shadow(0 0 5px rgba(255, 77, 148, 0.4));
+        }
+        50% {
+            transform: scale(1.08);
+            /* This creates the pink glow instead of white brightness */
+            filter: drop-shadow(0 0 15px rgba(255, 77, 148, 0.9));
+        }
+        100% {
+            transform: scale(1);
+            filter: drop-shadow(0 0 5px rgba(255, 77, 148, 0.4));
+        }
+    }
+
+
+    #dialog-box {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        height: 120px;
+        background: rgba(0, 0, 0, 0.8);
+        border: 2px solid #ff4d94;
+        border-radius: 10px;
+        padding: 20px;
+        color: white;
+        cursor: pointer;
+        z-index: 100;      /* Higher than sprite, so it stays on top */
+    }
+
+
+    #mc-sprite {
+        position: absolute;
+        bottom: 0;
+        left: 0;           /* 0 moves him to the absolute left edge */
+        height: 450px;    
+        width: auto;
+        z-index: 90;       /* Lower than dialog box */
+        transition: opacity 0.3s ease;
+    }
+
+
+
+
+    #char-name { color: #ff4d94; margin-bottom: 5px; }
+
+
+    #next-arrow {
+        position: absolute;
+        bottom: 10px;
+        right: 20px;
+        animation: bounce 1s infinite;
+    }
+
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+
+
+#trust-meter {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  padding: 8px 15px;
+  border-radius: 25px;
+  z-index: 100;
+  font-weight: bold;
+  font-size: 14px;
+  display: flex;
+  gap: 15px;
+  backdrop-filter: blur(10px); /* Optional subtle glass effect */
+}
+
+#trust-score {
+  color: #4CAF50; /* Green */
+}
+
+#suspicion-score {
+  color: #f44336; /* Red */
+}
+
+
+
+    /* Chat Header */
+    #chat-header {
+        height: 60px;
+        background: white;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        border-bottom: 1px solid #eee;
+    }
+
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    background-image: url("assets/alex_profile.jpg"); /* put your file path here */
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+
+
+
+    .name { font-weight: bold; display: block; }
+    .status { font-size: 0.8rem; color: #4CAF50; }
+
+
+    /* Chat Window */
+    #chat-window {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+
+    .message {
+        max-width: 70%;
+        padding: 10px 15px;
+        border-radius: 18px;
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+
+
+    .ai-msg {
+        background: white;
+        align-self: flex-start;
+        border-bottom-left-radius: 2px;
+    }
+
+
+    .user-msg {
+        background: #ff4d94;
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 2px;
+    }
+
+
+    /* Choice Buttons Area */
+    #choice-container {
+        height: 100px;
+        background: rgba(255, 255, 255, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        border-top: 1px solid #eee;
+    }
+
+
+    .choice-btn {
+        padding: 12px 24px;
+        border-radius: 25px;
+        border: none;
+        background: #ff4d94;
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.2s;
+    }
+
+
+    .choice-btn:hover {
+        background: #e6006e;
+        transform: scale(1.05);
+    }
+
+
+    /* Transition Overlay */
+    #transition-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: black;
+        z-index: 200;
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: #ff4d94;
+        font-family: 'Courier New', Courier, monospace;
+        text-align: center;
+    }
+
+
+    .loading-text {
+        font-size: 1.2rem;
+        margin-top: 20px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+
+    /* Scanned line effect */
+    .scan-line {
+        width: 80%;
+        height: 2px;
+        background: #ff4d94;
+        box-shadow: 0 0 15px #ff4d94;
+        position: absolute;
+        animation: scan 2s linear infinite;
+    }
+
+
+    @keyframes scan {
+        0% { top: 30%; opacity: 0; }
+        50% { opacity: 1; }
+        100% { top: 70%; opacity: 0; }
+    }
+    /* Ensure the chat area doesn't hide behind the header */
+    #chat-window {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        background: #fdf2f8; /* A light pink/neutral backing */
+        margin-top: 0;
+    }
+
+
+    /* Appropriate format for message bubbles */
+    .message {
+        max-width: 80%;
+        padding: 12px 16px;
+        border-radius: 18px;
+        font-size: 0.95rem;
+        line-height: 1.4;
+        position: relative;
+        word-wrap: break-word;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+
+    .ai-msg {
+        background: white;
+        align-self: flex-start;
+        border-bottom-left-radius: 2px;
+        border: 1px solid #eee;
+    }
+
+
+    .user-msg {
+        background: #ff4d94;
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 2px;
+    }
+    .flashback-effect {
+        animation: whiteout 1.5s ease-in-out;
+    }
+
+
+    @keyframes whiteout {
+        0% { filter: brightness(1) blur(0px); }
+        50% { filter: brightness(5) blur(10px); }
+        100% { filter: brightness(1) blur(0px); }
+    }
+
+
+    #white-flash {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 999;
+        transition: opacity 0.4s ease;
+    }
+
+#teacher-sprite {
+    display: none;
+    position: absolute;
+
+    /* Size */
+    height: 800px;
+    width: auto;
+
+    /* Position */
+    bottom: -350px;          /* hides feet slightly like VN style */
+    left: 18%;
+    transform: translateX(-50%);
+
+    /* Layering */
+    z-index: 90;            /* behind dialog */
+
+    pointer-events: none;
+}
+
+#teacher-choice-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;              /* 🔑 hidden by default */
+  flex-direction: column;
+  gap: 12px;
+  width: 70%;
+  max-width: 600px;
+  z-index: 150;
+}
+
+
+/* Style each answer as a big box */
+#teacher-choice-container .choice-btn {
+    width: 100%;
+    text-align: left;
+    padding: 14px 18px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: 2px solid #ff4d94;
+}
+
+#teacher-choice-container .choice-btn:hover:not(:disabled) {
+    background: #ff4d94;
+    color: #fff;
+}
+
+
+
+    /* Ensure your dialog box stays on top of the bigger sprite */
+    #dialog-box {
+        z-index: 100;
+        position: absolute;
+        bottom: 20px;
+    }
+
+
+    /* Slideshow Image Container (Optional if you want to show diagrams) */
+    #info-slide-container {
+        position: absolute;
+        top: 15%;
+        right: 5%;
+        width: 300px;
+        height: 200px;
+        background: white;
+        border: 4px solid #333;
+        display: none; /* Hidden until flashback starts */
+        z-index: 110;
+        box-shadow: 10px 10px 0px rgba(0,0,0,0.2);
+    }
+    #start-screen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999; /* Higher than everything else */
+        overflow: hidden;
+    }
+
+
+    .heart-bg {
+        position: absolute;
+        font-size: 400px;
+        opacity: 0.2;
+        z-index: -1;
+        pointer-events: none;
+    }
+
+
+    .title-eros {
+        font-size: 100px;
+        color: white;
+        text-shadow: 4px 4px 0px #ff4b2b;
+        margin-bottom: 20px;
+    }
+
+
+    #start-button {
+        padding: 15px 40px;
+        font-size: 24px;
+        font-weight: bold;
+        color: white;
+        background-color: #ff4b2b;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+
+    #start-button:hover {
+        transform: scale(1.1);
+    }
+
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 0px rgba(255, 107, 107, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(255, 107, 107, 0.9);
+    transform: scale(1.03);
+  }
+  100% {
+    box-shadow: 0 0 0px rgba(255, 107, 107, 0.4);
+    transform: scale(1);
+  }
+}
+
+.pulsing-glow {
+  animation: pulseGlow 1.5s infinite;
+  border: 3px solid #ff6b6b !important;
+  border-radius: 12px;
+}
