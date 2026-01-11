@@ -1741,103 +1741,144 @@ function transitionToDetective() {
 }
 
 function showBadEndingScreen() {
-  // Hide EVERYTHING first
-  document.getElementById("chat-window").style.display = "none";
-  document.getElementById("trust-meter").style.display = "none";
-  document.getElementById("intro-screen").style.display = "none";
-  document.getElementById("choice-container").style.display = "none";
+  // FORCE HIDE EVERY SINGLE GAME ELEMENT
+  const elementsToHide = [
+    'chat-window', 'trust-meter', 'intro-screen', 'choice-container', 
+    'phone-container', 'teacher-choice-container', 'dialog-box'
+  ];
   
-  // Create FULL SCREEN OVERLAY
-  const overlay = document.createElement("div");
-  overlay.id = "bad-ending-overlay";
-  overlay.style.cssText = `
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: #000;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    padding: 20px;
-    font-family: 'Helvetica Neue', sans-serif;
+  elementsToHide.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+
+  // Hide ALL chat messages too
+  const allChatMessages = document.querySelectorAll('.message');
+  allChatMessages.forEach(msg => msg.style.display = 'none');
+
+  // Keep game container visible
+  const gameContainer = document.getElementById('game-container');
+  if (gameContainer) {
+    gameContainer.style.display = 'block';
+    gameContainer.style.position = 'relative';
+  }
+
+  // Black backdrop FIRST (z-index 999)
+  const blackBackdrop = document.createElement('div');
+  blackBackdrop.id = 'ending-backdrop';
+  blackBackdrop.style.cssText = `
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+    background: #000 !important; z-index: 999 !important; 
+    border-radius: 5px;
   `;
-  
+  gameContainer.appendChild(blackBackdrop);
+
+  // Ending content SECOND (z-index 1000)
+  const overlay = document.createElement('div');
+  overlay.id = 'bad-ending-overlay';
+  overlay.style.cssText = `
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+    width: 85%; max-width: 850px; height: auto; max-height: 450px; 
+    background: rgba(0, 0, 0, 0.98); display: flex; flex-direction: column; 
+    justify-content: center; align-items: center; z-index: 1000 !important; 
+    padding: 30px; font-family: Helvetica Neue, sans-serif; 
+    border-radius: 15px; border: 3px solid #ff4d94;
+  `;
+
   overlay.innerHTML = `
     <div style="text-align: center; color: #ff4444; max-width: 600px;">
-      <div style="font-size: 48px; font-weight: bold; margin-bottom: 30px; text-shadow: 0 0 20px #ff4444;">BAD ENDING</div>
-      <p style="font-size: 24px; margin-bottom: 20px; line-height: 1.4;">You were <strong style="color: #ff6666;">too trusting</strong> of a stranger online.</p>
-      <p style="font-size: 24px; margin-bottom: 30px; line-height: 1.4;"><strong style="color: #ff6666;">Your identity was stolen</strong> by an AI scam.</p>
-      <p style="font-size: 18px; opacity: 0.8; margin-bottom: 40px;"><em>Lesson: Always verify before meeting someone from the internet!</em></p>
-      <button onclick="window.location.reload()" style="
-        padding: 18px 40px; 
-        background: linear-gradient(45deg, #ff4d94, #ff6b9d); 
-        color: white; 
-        border: none; 
-        border-radius: 50px; 
-        font-weight: bold; 
-        font-size: 20px; 
-        cursor: pointer;
-        box-shadow: 0 10px 30px rgba(255, 77, 148, 0.4);
-        transition: transform 0.2s;
-      " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">🔄 Play Again</button>
+      <div style="font-size: 42px; font-weight: bold; margin-bottom: 25px; text-shadow: 0 0 20px #ff4444;">
+        BAD ENDING
+      </div>
+      <p style="font-size: 22px; margin-bottom: 18px; line-height: 1.4;">
+        You were <strong style="color: #ff6666;">too trusting</strong> of a stranger online.
+      </p>
+      <p style="font-size: 22px; margin-bottom: 25px; line-height: 1.4;">
+        <strong style="color: #ff6666;">Your identity was stolen</strong> by an AI scam.
+      </p>
+      <p style="font-size: 16px; opacity: 0.9; margin-bottom: 35px; font-style: italic;">
+        Lesson: Always verify before meeting someone from the internet!
+      </p>
+      <button onclick="window.location.reload()" 
+              style="padding: 16px 36px; background: linear-gradient(45deg, #ff4d94, #ff6b9d); 
+                     color: white; border: none; border-radius: 45px; font-weight: bold; 
+                     font-size: 18px; cursor: pointer; box-shadow: 0 8px 25px rgba(255, 77, 148, 0.4);">
+        Play Again
+      </button>
     </div>
   `;
   
-  document.body.appendChild(overlay);
+  gameContainer.appendChild(overlay);
 }
-
 function showGoodEndingScreen() {
-  // Hide EVERYTHING first
-  document.getElementById("chat-window").style.display = "none";
-  document.getElementById("trust-meter").style.display = "none";
-  document.getElementById("intro-screen").style.display = "none";
-  document.getElementById("choice-container").style.display = "none";
+  // FORCE HIDE EVERY SINGLE GAME ELEMENT
+  const elementsToHide = [
+    'chat-window', 'trust-meter', 'intro-screen', 'choice-container', 
+    'phone-container', 'teacher-choice-container', 'dialog-box'
+  ];
   
-  // Create FULL SCREEN OVERLAY
-  const overlay = document.createElement("div");
-  overlay.id = "good-ending-overlay";
-  overlay.style.cssText = `
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: #000;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    padding: 20px;
-    font-family: 'Helvetica Neue', sans-serif;
+  elementsToHide.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+
+  // Hide ALL chat messages too
+  const allChatMessages = document.querySelectorAll('.message');
+  allChatMessages.forEach(msg => msg.style.display = 'none');
+
+  // Keep game container visible
+  const gameContainer = document.getElementById('game-container');
+  if (gameContainer) {
+    gameContainer.style.display = 'block';
+    gameContainer.style.position = 'relative';
+  }
+
+  // Black backdrop FIRST (z-index 999)
+  const blackBackdrop = document.createElement('div');
+  blackBackdrop.id = 'ending-backdrop';
+  blackBackdrop.style.cssText = `
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+    background: #000 !important; z-index: 999 !important; 
+    border-radius: 5px;
   `;
-  
+  gameContainer.appendChild(blackBackdrop);
+
+  // Ending content SECOND (z-index 1000)
+  const overlay = document.createElement('div');
+  overlay.id = 'good-ending-overlay';
+  overlay.style.cssText = `
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+    width: 85%; max-width: 850px; height: auto; max-height: 450px; 
+    background: rgba(0, 0, 0, 0.98); display: flex; flex-direction: column; 
+    justify-content: center; align-items: center; z-index: 1000 !important; 
+    padding: 30px; font-family: Helvetica Neue, sans-serif; 
+    border-radius: 15px; border: 3px solid #4CAF50;
+  `;
+
   overlay.innerHTML = `
     <div style="text-align: center; color: #4CAF50; max-width: 600px;">
-      <div style="font-size: 48px; font-weight: bold; margin-bottom: 30px; text-shadow: 0 0 20px #4CAF50;">GOOD ENDING</div>
-      <p style="font-size: 24px; margin-bottom: 20px; line-height: 1.4;"><strong style="color: #66bb6a;">Excellent work!</strong> You stayed alert and spotted the red flags.</p>
-      <p style="font-size: 24px; margin-bottom: 30px; line-height: 1.4;">You <strong style="color: #66bb6a;">protected yourself</strong> and helped stop an AI scam operation.</p>
-      <p style="font-size: 18px; opacity: 0.8; margin-bottom: 40px;"><em>Lesson: Trust your instincts when something feels off online!</em></p>
-      <button onclick="window.location.reload()" style="
-        padding: 18px 40px; 
-        background: linear-gradient(45deg, #4CAF50, #66bb6a); 
-        color: white; 
-        border: none; 
-        border-radius: 50px; 
-        font-weight: bold; 
-        font-size: 20px; 
-        cursor: pointer;
-        box-shadow: 0 10px 30px rgba(76, 175, 80, 0.4);
-        transition: transform 0.2s;
-      " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">🔄 Play Again</button>
+      <div style="font-size: 42px; font-weight: bold; margin-bottom: 25px; text-shadow: 0 0 20px #4CAF50;">
+        GOOD ENDING
+      </div>
+      <p style="font-size: 22px; margin-bottom: 18px; line-height: 1.4;">
+        <strong style="color: #66bb6a;">Excellent work!</strong> You stayed alert and spotted the red flags.
+      </p>
+      <p style="font-size: 22px; margin-bottom: 25px; line-height: 1.4;">
+        You <strong style="color: #66bb6a;">protected yourself</strong> and helped stop an AI scam operation.
+      </p>
+      <p style="font-size: 16px; opacity: 0.9; margin-bottom: 35px; font-style: italic;">
+        Lesson: Trust your instincts when something feels off online!
+      </p>
+      <button onclick="window.location.reload()" 
+              style="padding: 16px 36px; background: linear-gradient(45deg, #4CAF50, #66bb6a); 
+                     color: white; border: none; border-radius: 45px; font-weight: bold; 
+                     font-size: 18px; cursor: pointer; box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);">
+        Play Again
+      </button>
     </div>
   `;
   
-  document.body.appendChild(overlay);
+  gameContainer.appendChild(overlay);
 }
 
 function restartGame() {
@@ -2013,3 +2054,4 @@ function restartGame() {
   }
 
 }
+
