@@ -247,17 +247,13 @@ const teacherLessons = [
     { text: "With generative AI, fake profiles can now talk, act, and even look real.", sprite: "teacher_opensmile" },
     { text: "AI can generate faces using data found across the internet.", sprite: "teacher_neutral" },
     { text: "That means not every photo you see online belongs to a real person.", sprite: "teacher_smile" },
-    { text: "These fake images can be used for impersonation or image abuse.", sprite: "teacher_neutral" },
-    { text: "It would be smart to watch out for any inconsistencies in such images.", sprite: "teacher_neutral" },
+    { text: "These fake images can be used for impersonation or image abuse, so it would be smart to watch out for any inconsistencies in such images.", sprite: "teacher_neutral" },
     { text: "Such details could include complex features done wrong like hands and faces, unnatural lighting making the image flat and blurred elements as AI sometimes blend parts the body or background together.", sprite: "teacher_smile" },
-    { text: "Of course, fake images can also be used by real humans, so whatever I'm saying next applies to online safety in general.", sprite: "teacher_neutral"},
-    { text: "These profiles often start by being friendly.", sprite: "teacher_neutral" },
-    { text: "Small talk, shared interests, and trust.", sprite: "teacher_smile" },
-    { text: "Over time, questions slowly become more personal.", sprite: "teacher_neutral" },
-    { text: "That gradual shift is how online grooming usually begins.", sprite: "teacher_opensmile" },
+    { text: "Of course, fake images can also be used by real humans, so whatever I'm saying next applies to online safety in general.", sprite: "teacher_smile"},
+    { text: "These profiles often start by being friendly. Small talk, shared interests, and trust.", sprite: "teacher_neutral" },
+    { text: "Over time, questions slowly become more personal, and that gradual shift is how online grooming usually begins.", sprite: "teacher_opensmile" },
     { text: "At the same time, people tend to overshare without realising.", sprite: "teacher_neutral" },
-    { text: "AI is very good at connecting small details together.", sprite: "teacher_neutral" },
-    { text: "Your habits, location, even your identity can be pieced together.", sprite: "teacher_opensmile" },
+    { text: "AI is very good at connecting small details together. Your habits, location, even your identity can be pieced together.", sprite: "teacher_opensmile" },
     { text: "So if something feels off online, slow down.", sprite: "teacher_smile" },
     { text: "Don’t carelessly share personal info or images. Verify, save evidence, and report.", sprite: "teacher_happy" }
 ];
@@ -2015,4 +2011,5 @@ function restartGame() {
       });
     });
   }
+
 }
